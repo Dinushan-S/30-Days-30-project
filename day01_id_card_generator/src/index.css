@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+.navbar {
+  background-color: #7952b3;
+}
+
 .text-center {
   text-align: center;
 }
