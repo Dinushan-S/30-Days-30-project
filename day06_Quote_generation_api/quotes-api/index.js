@@ -11,7 +11,7 @@ const cors = require('cors')
 require('dotenv').config()
 
 //mongoDb connection
-mongoose.connect('mongodb+srv://user:asddsa123@quotes.tnwuqjo.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('')
     .then(() => console.log('connected'))
     .catch(err => console.log("not connected", err));;
 
