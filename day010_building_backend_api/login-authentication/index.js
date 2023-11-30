@@ -2,11 +2,16 @@ const express = require('express')
 const app = express();
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
-const port = process.env.PORT || 5000;
+const bodyParser = require('body-parser')
+const port = 3000;
 const cors = require('cors')
 
 const dbURI = 'mongodb+srv://user:12345@nodet.vcgvult.mongodb.net/user?retryWrites=true&w=majority'
 
+// app.get('/', (req, res) => {
+//     console.log("hi")
+//     res.send('hello world')
+// })
 
 //import route
 const authRoute = require('./routes/auth')
@@ -14,24 +19,31 @@ const postRoute = require('./routes/posts')
 
 dotenv.config()
 //dbconnect
-mongoose.connect(dbURI, (err) => {
-    if (err) {
-        console.error(err);
-    } else {
-        console.log("Connected to DB");
-    }
-})
+mongoose.connect(dbURI)
+    .then(result => { console.log(`connect ${port}`) })
+    .catch(err => console.log(err))
 
-//middleware
-app.use(express.json)
-app.use(cors())
+app.use(bodyParser.json());
 
-//route middleware
-app.use('/api/user', authRoute);
-app.use('/api/posts', postRoute)
+// app.use('/user', authRoute, (req, res) => {
+//     res.send('hi in user')
+//     console.log('in user')
+// });
 
 app.get('/', (req, res) => {
     res.send('hello world')
 })
 
-app.listen(port)
+//middleware
+// app.use(express.json)
+// app.use(cors())
+
+
+//route middleware
+app.use(express.urlencoded({ extended: true }))
+app.use('/user', authRoute);
+app.use('/api/posts', postRoute, (req, res) => console.log('api/posts'))
+
+app.listen(port, (req, res) => {
+    console.log('server started')
+})
