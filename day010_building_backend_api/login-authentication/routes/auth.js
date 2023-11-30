@@ -1,5 +1,5 @@
-const route = require('express').Router();
-const user = require('../model/User');
+const express = require('express');
+const router = express.Router();
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const verify = require('./verifyToken');
@@ -8,7 +8,8 @@ const User = require('../model/User');
 
 
 //Registration Route
-route.post('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
+    console.log("req register")
     //validate data before making user
     const validate = registerValidate(req.body);
     if (validate.error) {
@@ -29,10 +30,10 @@ route.post('/register', async (req, res) => {
     const user = new User({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.hashedPassword
+        password: hashedPassword
     });
     try {
-        const sendUser = await user.save();
+        await user.save();
         res.send({ 'user': user._id })
     } catch (err) {
         res.status(400).send(err)
@@ -40,7 +41,7 @@ route.post('/register', async (req, res) => {
 })
 
 //login route
-route.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     //validate data before making user
     const validation = loginValidate(req.body)
     if (validation.error) {
@@ -57,18 +58,18 @@ route.post('/login', async (req, res) => {
     if (!validPass) return res.status(400).send('Password is wrong');
 
     //create and assign token
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET)
+    const token = jwt.sign({ _id: user._id }, "dasfsdf")
     res.header('auth-token', token).send({ "token": token });
 })
 
-route.get('/me', verify, async (req, res) => {
+router.get('/me', verify, async (req, res) => {
     try {
         // request.user is getting fetched from Middleware after token authentication
-        const user = await User.findOne(req.body._id);
+        await User.findOne(req.body._id);
         res.json({ "response": "sucess" })
     } catch (e) {
         res.send({ message: "error in fetching user" })
     }
 })
 
-module.exports = route;
+module.exports = router;
