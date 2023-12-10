@@ -6,7 +6,7 @@ export const About = () => {
             <div className='resume-section-content'>
                 <h1 className='mb-0'>
                     Dinushan
-                    <span className='text-primary'>Native</span>
+                    <span className='text-primary'></span>
                 </h1>
                 <div className='subheading mb-5'>Software Developer - Vavuniya Srilanka</div>
                 <p className='lead mb-5'>
